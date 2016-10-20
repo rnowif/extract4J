@@ -14,8 +14,8 @@ public class ExtractionStreamBuilder<S, D> {
         return new ExtractionStreamBuilder<>(extractionSource, source -> source);
     }
 
-    public <D2> ExtractionStreamBuilder<S, D2> map(ExtractionMapper<S, D2> extractionMapper) {
-        return new ExtractionStreamBuilder<>(extractionSource, extractionMapper);
+    public <D2> ExtractionStreamBuilder<S, D2> map(ExtractionMapper<D, D2> extractionMapper) {
+        return new ExtractionStreamBuilder<>(extractionSource, this.extractionMapper.andThen(extractionMapper));
     }
 
     public ExtractionStream<S, D> to(ExtractionDestination<D> extractionDestination) {

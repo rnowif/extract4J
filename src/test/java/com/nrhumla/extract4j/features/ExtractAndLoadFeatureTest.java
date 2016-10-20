@@ -37,4 +37,18 @@ public class ExtractAndLoadFeatureTest {
         assertThat(output, hasItems("0", "1", "2"));
     }
 
+    @Test
+    public void should_extract_from_input_and_load_to_output_with_multiple_transformations() {
+        List<String> output = new ArrayList<>();
+
+        ExtractionStreamBuilder
+                .from(() -> Flux.just(0, 1, 2))
+                .map(source -> source + 1)
+                .map(Object::toString)
+                .to(output::add)
+                .run();
+
+        assertThat(output, hasItems("1", "2", "3"));
+    }
+
 }
