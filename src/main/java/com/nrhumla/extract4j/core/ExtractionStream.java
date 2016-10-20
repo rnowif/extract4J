@@ -1,16 +1,20 @@
 package com.nrhumla.extract4j.core;
 
-public class ExtractionStream<T> {
+public class ExtractionStream<S, D> {
 
-    private final ExtractionSource<T> extractionSource;
-    private final ExtractionDestination<T> extractionDestination;
+    private final ExtractionSource<S> extractionSource;
+    private final ExtractionDestination<D> extractionDestination;
+    private final ExtractionMapper<S, D> extractionMapper;
 
-    public ExtractionStream(ExtractionSource<T> extractionSource, ExtractionDestination<T> extractionDestination) {
+    public ExtractionStream(ExtractionSource<S> extractionSource, ExtractionMapper<S, D> extractionMapper, ExtractionDestination<D> extractionDestination) {
         this.extractionSource = extractionSource;
+        this.extractionMapper = extractionMapper;
         this.extractionDestination = extractionDestination;
     }
 
     public void run() {
-        extractionSource.load().subscribe(extractionDestination::consume);
+        extractionSource.load()
+                .map(extractionMapper::map)
+                .subscribe(extractionDestination::consume);
     }
 }

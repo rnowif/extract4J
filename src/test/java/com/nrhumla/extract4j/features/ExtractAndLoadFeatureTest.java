@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 public class ExtractAndLoadFeatureTest {
     
     @Test
-    public void should_extract_from_input_and_load_to_output() {
+    public void should_extract_from_input_and_load_to_output_with_no_transformation() {
         List<String> output = new ArrayList<>();
 
         ExtractionStreamBuilder
@@ -22,6 +22,19 @@ public class ExtractAndLoadFeatureTest {
                 .run();
 
         assertThat(output, hasItems("a", "b", "c"));
+    }
+
+    @Test
+    public void should_extract_from_input_and_load_to_output_with_transformation() {
+        List<String> output = new ArrayList<>();
+
+        ExtractionStreamBuilder
+                .from(() -> Flux.just(0, 1, 2))
+                .map(Object::toString)
+                .to(output::add)
+                .run();
+
+        assertThat(output, hasItems("0", "1", "2"));
     }
 
 }

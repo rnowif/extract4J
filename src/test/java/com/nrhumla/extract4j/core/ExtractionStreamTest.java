@@ -17,10 +17,11 @@ public class ExtractionStreamTest {
 
         new ExtractionStream<>(
                 () -> Flux.just("a", "b", "c"),
+                String::toUpperCase,
                 output::add
         ).run();
 
-        assertThat(output, hasItems("a", "b", "c"));
+        assertThat(output, hasItems("A", "B", "C"));
     }
 
 
